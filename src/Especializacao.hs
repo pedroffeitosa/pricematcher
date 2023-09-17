@@ -1,10 +1,13 @@
 module Especializacao where
 
-data Especializacao = Especializacao {
-    id :: Int,
-    descricao :: String,
-    valor :: Int
-}
+    data Especializacao = Especializacao {
+        id :: Int,
+        descricao :: String,
+        valor :: Int
+    }
 
-toStringEspecializacao :: Especializacao -> String
-toStringEspecializacao = descricao
+    getDescricao :: Especializacao -> String
+    getDescricao = descricao
+
+    getValor :: Especializacao -> Int
+    getValor = valor

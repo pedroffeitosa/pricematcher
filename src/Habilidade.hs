@@ -1,10 +1,13 @@
 module Habilidade where
 
-data Habilidade = Habilidade {
-    id :: Int,
-    descricao :: String,
-    valor :: Int
-}
+    data Habilidade = Habilidade {
+        id :: Int,
+        descricao :: String,
+        valor :: Int
+    }
 
-toStringHabilidade :: Habilidade -> String
-toStringHabilidade = descricao
+    getDescricao :: Habilidade -> String
+    getDescricao = descricao
+
+    getValor :: Habilidade -> Int
+    getValor = valor
