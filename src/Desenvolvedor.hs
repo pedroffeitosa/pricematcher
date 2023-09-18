@@ -8,8 +8,27 @@ module Desenvolvedor where
         nome :: String,
         especializacao :: [Especializacao],
         experiencia :: [Experiencia],
-        habilidades :: [Habilidade]
+        habilidades :: [Habilidade],
+        valorHora :: Float
     }
+
+    getEspMult :: [Especializacao] -> Float
+    getEspMult [] = 0
+    getEspMult (head:tail) = Especializacao.getMultiplicador head + getEspMult tail
+
+    getXpMult :: [Experiencia] -> Float
+    getXpMult [] = 0
+    getXpMult (head:tail) = (Experiencia.getMultiplicador head * (fromIntegral (getAnosTrabalho head) :: Float)) + getXpMult tail
+
+    getHabMult :: [Habilidade] -> Float
+    getHabMult [] = 0
+    getHabMult (head:tail) = Habilidade.getMultiplicador head + getHabMult tail
+
+    getMultiplicador :: Desenvolvedor -> Float
+    getMultiplicador des = getEspMult (especializacao des) + getXpMult (experiencia des) + getHabMult (habilidades des)
+
+    getValorHora :: Desenvolvedor -> Float
+    getValorHora des = valorHora des * (1 + Desenvolvedor.getMultiplicador des)
 
     -- retorna o desenvolvedor com a especializacao que deseja adicionar
     addEspecializacao :: Desenvolvedor -> Especializacao -> Desenvolvedor
@@ -35,7 +54,8 @@ module Desenvolvedor where
         "Nome: " ++ nome desenvolvedor ++ "\n" ++
         "\nEspecializacao(oes): \n" ++ especializacoesToString (especializacao desenvolvedor) ++
         "\nExperiencia(as): \n" ++ experienciasToString (experiencia desenvolvedor) ++
-        "\nHabilidade(s): \n" ++ habilidadesToString (habilidades desenvolvedor)
+        "\nHabilidade(s): \n" ++ habilidadesToString (habilidades desenvolvedor) ++
+        "\n Hora: R$ " ++ show (getValorHora desenvolvedor)
 
     -- retorna uma string com todas as especializacoes do desenvolvedor
     especializacoesToString :: [Especializacao] -> String

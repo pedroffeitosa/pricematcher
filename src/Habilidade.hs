@@ -3,11 +3,11 @@ module Habilidade where
     data Habilidade = Habilidade {
         id :: Int,
         descricao :: String,
-        valor :: Int
+        multiplicador :: Float
     }
 
     getDescricao :: Habilidade -> String
     getDescricao = descricao
 
-    getValor :: Habilidade -> Int
-    getValor = valor
+    getMultiplicador :: Habilidade -> Float
+    getMultiplicador = multiplicador
