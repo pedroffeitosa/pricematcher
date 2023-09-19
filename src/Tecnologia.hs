@@ -1,6 +1,7 @@
 module Tecnologia where
 
     data Tecnologia = Tecnologia {
+        id :: Int,
         nome :: String,
         valor :: Int
     }

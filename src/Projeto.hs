@@ -4,6 +4,7 @@ module Projeto where
     import Habilidade
     
     data Projeto = Projeto {
+        id :: Int,
         descricao :: String,
         prazo :: Data,
         complexidade :: Int,
@@ -12,9 +13,11 @@ module Projeto where
         nHorasRecomendado :: Int
     }
 
+    -- retorna a descrição do projeto
     getDescricao :: Projeto -> String
     getDescricao = Projeto.descricao
 
+    -- retorna a data final do projeto em string no formato DD/MM/AAAA
     getPrazo :: Projeto -> String
     getPrazo p = dataToString (prazo p)
 
@@ -22,12 +25,15 @@ module Projeto where
     getComplexidade :: Projeto -> Int
     getComplexidade = complexidade
 
+    -- retorna uma lista de tecnologias
     getTecnologias :: Projeto -> [Tecnologia]
     getTecnologias = tecnologias
 
+    -- retorna uma lista de requisitos
     getRequisitos :: Projeto -> [Habilidade]
     getRequisitos = requisitos
 
+    -- retorna o numero de horas recomendado
     getHoras :: Projeto -> Int
     getHoras = nHorasRecomendado
 

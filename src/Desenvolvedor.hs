@@ -12,21 +12,26 @@ module Desenvolvedor where
         valorHora :: Float
     }
 
+    -- retorna o somatorio dos multiplicadores de todas as especializações
     getEspMult :: [Especializacao] -> Float
     getEspMult [] = 0
     getEspMult (head:tail) = Especializacao.getMultiplicador head + getEspMult tail
 
+    -- retorna o somatorio dos multiplicadores de todas as experiencias
     getXpMult :: [Experiencia] -> Float
     getXpMult [] = 0
     getXpMult (head:tail) = (Experiencia.getMultiplicador head * (fromIntegral (getAnosTrabalho head) :: Float)) + getXpMult tail
 
+    -- retorna o somatorio dos multiplicadores de todas as habilidades
     getHabMult :: [Habilidade] -> Float
     getHabMult [] = 0
     getHabMult (head:tail) = Habilidade.getMultiplicador head + getHabMult tail
 
+    -- retorna o somatorio dos multiplicadores de especializações, experiencias e habilidades
     getMultiplicador :: Desenvolvedor -> Float
     getMultiplicador des = getEspMult (especializacao des) + getXpMult (experiencia des) + getHabMult (habilidades des)
 
+    -- retorna o valorHora com o adicional do multiplicador (valorHora * 1+multiplicador)
     getValorHora :: Desenvolvedor -> Float
     getValorHora des = valorHora des * (1 + Desenvolvedor.getMultiplicador des)
 

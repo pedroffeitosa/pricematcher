@@ -6,17 +6,17 @@ import Habilidade
 main :: IO()
 main = do
     putStrLn "================INICIO================"
-    let proj = Projeto "Descricao" (Data 10 08 2024) 0 [] [] 0
+    let proj = Projeto 1 "Descricao" (Data 10 08 2024) 0 [] [] 0
 
     putStrLn (projetoToString proj)
 
     putStrLn "================Adicionando Tecnologia================"
 
-    let projTemp = addTecnologia proj (Tecnologia "tec1" 1)
+    let projTemp = addTecnologia proj (Tecnologia 1 "tec1" 1)
 
     let proj = projTemp
 
-    let projTemp = addTecnologia proj (Tecnologia "tec2" 2)
+    let projTemp = addTecnologia proj (Tecnologia 2 "tec2" 2)
 
     let proj = projTemp
 
