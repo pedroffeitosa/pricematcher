@@ -2,16 +2,23 @@ module Projeto where
     import Data
     import Tecnologia
     import Habilidade
-    
+
     data Projeto = Projeto {
         id :: Int,
         descricao :: String,
         prazo :: Data,
-        complexidade :: Int,
-        tecnologias :: [Tecnologia],
-        requisitos :: [Habilidade],
-        nHorasRecomendado :: Int
+        complexidade :: Complexidade,
+        requisitos :: [Habilidade]
     }
+
+    -- Definição de complexidade
+    data Complexidade = Facil | Intermediario | Dificil
+
+    -- retorna uma string que informa o valor da complexidade
+    complexidadeToString :: Complexidade -> String
+    complexidadeToString Facil = "Facil"
+    complexidadeToString Intermediario = "Intermediario"
+    complexidadeToString Dificil = "Dificil"
 
     -- retorna a descrição do projeto
     getDescricao :: Projeto -> String
@@ -21,13 +28,9 @@ module Projeto where
     getPrazo :: Projeto -> String
     getPrazo p = dataToString (prazo p)
 
-    -- retorna complexidade, calculo ainda precisa ser implementado
-    getComplexidade :: Projeto -> Int
-    getComplexidade = complexidade
-
-    -- retorna uma lista de tecnologias
-    getTecnologias :: Projeto -> [Tecnologia]
-    getTecnologias = tecnologias
+    -- retorna a complexidade do projeto
+    getComplexidade :: Projeto -> String
+    getComplexidade proj = complexidadeToString (complexidade proj)
 
     -- retorna uma lista de requisitos
     getRequisitos :: Projeto -> [Habilidade]
@@ -35,13 +38,10 @@ module Projeto where
 
     -- retorna o numero de horas recomendado
     getHoras :: Projeto -> Int
-    getHoras = nHorasRecomendado
-
-    -- retorna o projeto com a tecnologia que deseja adicionar
-    addTecnologia :: Projeto -> Tecnologia -> Projeto
-    addTecnologia proj tec = do
-        let tecTemp = tecnologias proj ++ [tec]
-        proj {tecnologias = tecTemp}
+    getHoras proj
+        | complexidadeToString (complexidade proj) == "Facil" = 80
+        | complexidadeToString (complexidade proj) == "Intermediario" = 120
+        | otherwise = 180
 
     -- retorna o projeto com a habilidade que deseja adicionar
     addRequisito :: Projeto -> Habilidade -> Projeto
@@ -64,7 +64,6 @@ module Projeto where
     projetoToString projeto =
         "Descricao: " ++ Projeto.getDescricao projeto ++ "\n" ++
         "Prazo: " ++ getPrazo projeto ++ "\n" ++
-        "Complexidade: " ++ show (getComplexidade projeto) ++ "\n" ++
-        "\nTecnologia(s): \n" ++ tecnologiasToString (tecnologias projeto) ++
+        "Complexidade: " ++ getComplexidade projeto ++ "\n" ++
         "\nRequisito(s): \n" ++ requisitosToString (requisitos projeto) ++
         "\nHoras: " ++ show (getHoras projeto)
