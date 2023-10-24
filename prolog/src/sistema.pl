@@ -2,6 +2,7 @@
 :- dynamic desenvolvedor/5.
 :- consult('projeto.pl').
 
+% Adiciona um desenvolvedor com nome, sem especializacoes/experiencias, com valor_hora e multiplicador padrao
 adc_desenv(Nome) :-
     open('desenvolvedor.pl', append, Stream),
     write(Stream, 'desenvolvedor(nome(\''),
@@ -10,6 +11,7 @@ adc_desenv(Nome) :-
     nl(Stream),
     close(Stream).
 
+% Adiciona um projeto com Descricao, Prazo de Entrega, Complexidade (Facil, Intermediario, Difícil), e uma lista de requisitos
 adc_projeto(Descricao, Prazo, Complexidade, Requisitos) :-
     complexidade(Complexidade, ComplAux, Horas),
     open('projeto.pl', append, Stream),
@@ -21,10 +23,12 @@ adc_projeto(Descricao, Prazo, Complexidade, Requisitos) :-
     write(Stream, ').'), nl(Stream),
     close(Stream).
 
+% Define as horas recomendadas dependendo da complexidade
 complexidade(f, 'Facil', 80).
 complexidade(i, 'Intermediario', 160).
 complexidade(d, 'Dificil', 240).
 
+% Adiciona uma especialização no Desenvolvedor em questão
 adc_especializacao(Desenvolvedor, Especializacao) :-
     consult('desenvolvedor.pl'),
     (desenvolvedor(nome(Desenvolvedor), especializacoes(ListaEsp), Xp, Vh, multiplicador(Mult)) ->
@@ -36,6 +40,7 @@ adc_especializacao(Desenvolvedor, Especializacao) :-
     ;
         write('Desenvolvedor nao cadastrado!')).
 
+% Adiciona uma experiencia no Desenvolvedor em questão, a experiencia é uma lista contendo uma descrição, data de inicio e data final respectivamente
 adc_experiencia(Desenvolvedor, Experiencia, Meses) :-
     consult('desenvolvedor.pl'),
     (desenvolvedor(nome(Desenvolvedor), Esp, experiencia(ListaXp), Vh, multiplicador(Mult)) ->
@@ -47,6 +52,7 @@ adc_experiencia(Desenvolvedor, Experiencia, Meses) :-
     ;
         write('Desenvolvedor nao cadastrado')).
 
+% Calcula o número de meses de experiencia dadas uma data de inicio e uma data final
 tempo_de_servico([MesInicio, AnoInicio], [MesInicio, AnoFim], R) :- R is (AnoFim - AnoInicio) * 12,!.
 tempo_de_servico([MesInicio, AnoInicio], [MesFim, AnoInicio], R) :- R is MesFim - MesInicio,!.
 tempo_de_servico([MesInicio, AnoInicio], [MesFim, AnoFim], R) :-
@@ -54,6 +60,7 @@ tempo_de_servico([MesInicio, AnoInicio], [MesFim, AnoFim], R) :-
     Ano is ((AnoFim - AnoInicio) * 12),
     R is (Mes + Ano).
 
+% salva as modificações dos fatos dinamicos no banco de dados
 salvar_desenv :-
     telling(OutputStream),
     tell('desenvolvedor.pl'),
@@ -61,6 +68,7 @@ salvar_desenv :-
     told,
     tell(OutputStream).
 
+% Lê os dados do console para adicionar um desenvolvedor
 console_adc_desenv :-
     consult('desenvolvedor.pl'),
     write('Nome: '),
@@ -70,6 +78,7 @@ console_adc_desenv :-
     ;
         adc_desenv(Nome)).
 
+% Lê os dados do console para adicionar uma especialização em um desenvolvedor
 console_adc_espec :-
     consult('desenvolvedor.pl'),
     write('Nome (entre aspas simples): '), nl,
@@ -81,6 +90,7 @@ console_adc_espec :-
     ;
         write('Desenvolvedor nao cadastrado!')).
 
+% Lê os dados do console para adicionar uma experiencia em um desenvolvedor
 console_adc_experiencia :-
     consult('desenvolvedor.pl'),
     write('Nome (entre aspas simples): '), nl,
@@ -99,6 +109,7 @@ console_adc_experiencia :-
     Experiencia = [Descricao, DataInicio, DataFinal],
     adc_experiencia(Nome, Experiencia, R).
 
+% Lê os dados do console para adicionar um projeto ao banco de dados
 console_adc_projeto :-
     consult('projeto.pl'),
     write('Descricao (entre aspas simples):'), nl, read(Descricao),
