@@ -43,6 +43,7 @@ adc_experiencia(Desenvolvedor, Experiencia, Meses) :-
 
 % Calcula o número de meses de experiencia dadas uma data de inicio e uma data final
 tempo_de_servico([MesInicio, AnoInicio], [MesInicio, AnoFim], R) :- R is (AnoFim - AnoInicio) * 12,!.
+tempo_de_servico([MesInicio, AnoInicio], [MesInicio, AnoFim], R) :- R is MesInicio - MesInicio,!.
 tempo_de_servico([MesInicio, AnoInicio], [MesFim, AnoInicio], R) :- R is MesFim - MesInicio,!.
 tempo_de_servico([MesInicio, AnoInicio], [MesFim, AnoFim], R) :-
     Mes is ((12 - MesInicio) + (MesFim)),
