@@ -123,3 +123,15 @@ console_adc_projeto :-
         write("Projeto ja cadastrado!")
     ;
         adc_projeto(Descricao, Prazo, Complexidade, ReqAux)).
+
+% Consulta para listar os projetos
+listar_projetos :-
+    consult('projeto.pl'),
+    findall(Projeto, projeto(Projeto), Projetos),
+    writeln('Projetos Cadastrados:'),
+    listar_projetos(Projetos).
+
+listar_projetos([]).
+listar_projetos([Projeto | Projetos]) :-
+    writeln(Projeto),
+    listar_projetos(Projetos).
