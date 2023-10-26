@@ -1,5 +1,6 @@
 :- consult('desenvolvedor.pl').
 :- consult('projeto.pl').
+:- consult('historico.pl').
 
 % Adiciona um desenvolvedor com nome, sem especializacoes/experiencias, com valor_hora e multiplicador padrao
 adc_desenv(Nome) :-
@@ -19,7 +20,6 @@ complexidade("d", "Dificil", 240).
 
 % Adiciona uma especialização no Desenvolvedor em questão
 adc_especializacao(Desenvolvedor, Especializacao) :-
-    %consult('desenvolvedor.pl'),
     (desenvolvedor(nome(Desenvolvedor), especializacoes(ListaEsp), Xp, Vh, multiplicador(Mult)) ->
         append(ListaEsp, [Especializacao], Resultante),
         MultAux is Mult+0.2,
@@ -27,11 +27,10 @@ adc_especializacao(Desenvolvedor, Especializacao) :-
         assert(desenvolvedor(nome(Desenvolvedor), especializacoes(Resultante), Xp, Vh, multiplicador(MultAux))),
         salvar_desenv
     ;
-        write("Desenvolvedor nao cadastrado!")).
+        write("Desenvolvedor nao cadastrado!"),nl).
 
 % Adiciona uma experiencia no Desenvolvedor em questão, a experiencia é uma lista contendo uma descrição, data de inicio e data final respectivamente
 adc_experiencia(Desenvolvedor, Experiencia, Meses) :-
-    %consult('desenvolvedor.pl'),
     (desenvolvedor(nome(Desenvolvedor), Esp, experiencia(ListaXp), Vh, multiplicador(Mult)) ->
         append(ListaXp, [Experiencia], Resultante),
         MultAux is (Mult+(0.01*Meses)),
@@ -39,11 +38,10 @@ adc_experiencia(Desenvolvedor, Experiencia, Meses) :-
         assert(desenvolvedor(nome(Desenvolvedor), Esp, experiencia(Resultante), Vh, multiplicador(MultAux))),
         salvar_desenv
     ;
-        write("Desenvolvedor nao cadastrado!")).
+        write("Desenvolvedor nao cadastrado!"),nl).
 
 % Calcula o número de meses de experiencia dadas uma data de inicio e uma data final
 tempo_de_servico([MesInicio, AnoInicio], [MesInicio, AnoFim], R) :- R is (AnoFim - AnoInicio) * 12,!.
-tempo_de_servico([MesInicio, AnoInicio], [MesInicio, AnoFim], R) :- R is MesInicio - MesInicio,!.
 tempo_de_servico([MesInicio, AnoInicio], [MesFim, AnoInicio], R) :- R is MesFim - MesInicio,!.
 tempo_de_servico([MesInicio, AnoInicio], [MesFim, AnoFim], R) :-
     Mes is ((12 - MesInicio) + (MesFim)),
@@ -66,74 +64,101 @@ salvar_projeto :-
     told,
     tell(OutputStream).
 
-% Lê os dados do console para adicionar um desenvolvedor
-console_adc_desenv :-
-    %consult('desenvolvedor.pl'),
-    write("Nome: "),
-    read_line_to_string(user_input, Nome),
-    (desenvolvedor(nome(Nome), _, _, _, _) ->
-        write("Desenvolvedor ja cadastrado!")
-    ;
-        adc_desenv(Nome)).
-
-% Lê os dados do console para adicionar uma especialização em um desenvolvedor
-console_adc_espec :-
-    %consult('desenvolvedor.pl'),
-    write("Nome: "), nl,
-    read_line_to_string(user_input, Nome),
-    write("Especializacao: "), nl,
-    read_line_to_string(user_input, Espec),
-    (desenvolvedor(nome(Nome), _, _, _, _) ->
-        adc_especializacao(Nome, Espec)
-    ;
-        write("Desenvolvedor nao cadastrado!")).
-
-% Lê os dados do console para adicionar uma experiencia em um desenvolvedor
-console_adc_experiencia :-
-    %consult('desenvolvedor.pl'),
-    write("Nome: "), nl,
-    read_line_to_string(user_input, Nome),
-    write("Instituicao/Curso: "), nl,
-    read_line_to_string(user_input, Descricao), nl,
-    write("Data de inicio (Formato: MM/AAAA): "),
-    read_line_to_string(user_input, DataInicio),
-    write("Data Final (Formato: MM/AAAA): "),
-    read_line_to_string(user_input, DataFinal),
-    split_string(DataInicio, '/', ' ', DataInicioAux),
-    split_string(DataFinal, '/', ' ', DataFinalAux),
-    DataInicioAux = [MI,AI], DataFinalAux = [MF,AF],
-    number_string(MIAux, MI), number_string(MFAux, MF), number_string(AIAux, AI), number_string(AFAux, AF),
-    tempo_de_servico([MIAux,AIAux], [MFAux,AFAux], R),
-    Experiencia = [Descricao, DataInicio, DataFinal],
-    adc_experiencia(Nome, Experiencia, R).
-
-% Lê os dados do console para adicionar um projeto ao banco de dados
-console_adc_projeto :-
-    %consult('projeto.pl'),
-    write("Descricao: "), nl,
-    read_line_to_string(user_input, Descricao),
-    write("Prazo: "), nl,
-    read_line_to_string(user_input, Prazo),
-    write("Complexidade (f = Facil; i = Intermediario; d = Dificil): "), nl,
-    read_line_to_string(user_input, Complexidade),
-    write("Requisitos (separados por virgulas): "), nl,
-    read_line_to_string(user_input, Requisitos),
-    split_string(Requisitos, ',', ' ', ReqAux),
-    (projeto(descricao(Descricao), _, _, _, _) ->
-        write("Projeto ja cadastrado!")
-    ;
-        adc_projeto(Descricao, Prazo, Complexidade, ReqAux)).
+% salva as modificações dos fatos dinamicos sobre historico no banco de dados
+salvar_historico :-
+    telling(OutputStream),
+    tell('historico.pl'),
+    listing(historico),
+    told,
+    tell(OutputStream).
 
 % Consulta para listar os projetos
 listar_projetos :-
-    consult('projeto.pl'),
-    findall(Projeto, projeto(Projeto, _, _, _, _), Projetos), 
+    findall(Projeto, projeto(descricao(Projeto), _, _, _, _), Projetos),
     writeln('Projetos Cadastrados:'),
+    writeln("--------------------"),
     listar_projetos(Projetos).
-    
+
+% Lista todos os projetos existentes no banco de dados
 listar_projetos([]).
 listar_projetos([Projeto | Projetos]) :-
-    writeln(Projeto),
+    projeto(descricao(Projeto), prazo(Prazo), complexidade(Complexidade), requisitos(Requisitos), horas(Horas)),
+    write("Descricao: "), writeln(Projeto),
+    write("Prazo: "), writeln(Prazo),
+    write("Complexidade: "), writeln(Complexidade),
+    write("Requisitos: "), writeln(Requisitos),
+    write("Horas: "), writeln(Horas),
+    writeln("--------------------"),
     listar_projetos(Projetos).
 
+% Lista um Projeto expecifico
+listar_projeto(Projeto) :-
+    projeto(descricao(Projeto), prazo(Prazo), complexidade(Complexidade), requisitos(Requisitos), horas(Horas)),
+    write("Descricao: "), writeln(Projeto),
+    write("Prazo: "), writeln(Prazo),
+    write("Complexidade: "), writeln(Complexidade),
+    write("Requisitos: "), writeln(Requisitos),
+    write("Horas: "), writeln(Horas),
+    writeln("--------------------").
 
+% lista o historico de projetos de um desenvolvedor
+listar_historico(Desenvolvedor) :-
+    (desenvolvedor(nome(Desenvolvedor), _, _, _, _) ->
+        findall(Projeto, historico(desenvolvedor(Desenvolvedor), projeto(Projeto), _), Projetos),
+        writeln('Historico: '),
+        listar_proj_historico(Projetos)
+    ;
+        writeln("Desenvolvedor nao cadastrado!")
+    ).
+
+% Lista todos os projetos de uma lista
+listar_proj_historico([]).
+listar_proj_historico([Projeto | Projetos]) :-
+    listar_projeto(Projeto),
+    listar_proj_historico(Projetos).
+
+% Lista informacoes de um dado desenvolvedor caso exista, caso contrario, uma mensagem informa que nao esta cadastrado
+listar_desenvolvedor(Desenvolvedor) :-
+    (desenvolvedor(nome(Desenvolvedor), especializacoes(Esp), experiencia(Xp), valor_hora(VH), _) ->
+        write("Especializacoes: "), writeln(Esp),
+        writeln("Experiencia: "), listar_experiencia(Xp),
+        write("Valor/Hora: "), writeln(VH)
+    ;
+        writeln("Desenvolvedor nao cadastrado!")).
+
+% Lista todas as experiencias de um desenvolvedor mostrando descricao, data de inicio e data final
+listar_experiencia([]).
+listar_experiencia([Xp | Xps]) :-
+    Xp = [Instituicao, DataInicio, DataFinal],
+    write("Instituicao/Curso: "), write(Instituicao), write(" | Data Inicio: "), write(DataInicio), write(" | Data Final: "), writeln(DataFinal),
+    listar_experiencia(Xps).
+
+% verifica existencia de Desenvolvedor e Projeto e cria historico, caso os dois existam, e o Desenvolvedor atenda aos requisitos
+optar_projeto(Desenvolvedor, Projeto) :-
+    (desenvolvedor(nome(Desenvolvedor), especializacoes(Esp), _, valor_hora(VH), multiplicador(Mult)) ->
+        (projeto(descricao(Projeto), _, _, requisitos(Req), horas(Horas)) ->
+            Custo is VH * Mult * Horas,
+            (checar_requisitos(Req, Esp) ->
+                assert(historico(desenvolvedor(Desenvolvedor), projeto(Projeto), custo(Custo))),
+                salvar_historico,
+                write('O desenvolvedor '), write(Desenvolvedor), write(' optou por desenvolver o projeto '), writeln(Projeto),
+                write('Valor a ser cobrado: '), writeln(Custo)
+            ;
+                writeln('O desenvolvedor nao atende aos requisitos do projeto!')
+            )
+        ;
+            writeln('Projeto nao cadastrado!')
+        )
+    ;
+        writeln('Desenvolvedor nao cadastrado!')
+    ).
+
+% Verifica se todos os elementos de uma lista estao contidos em outra
+checar_requisitos([Requisito | []], Especializacoes) :- elem_lista(Requisito, Especializacoes).
+checar_requisitos([Requisito | Requisitos], Especializacoes) :-
+    elem_lista(Requisito, Especializacoes),
+    checar_requisitos(Requisitos, Especializacoes).
+
+% Verifica se elemento esta na lista
+elem_lista(Elem, [Elem | _]) :- !.
+elem_lista(Elem, [_ | Cauda]) :- elem_lista(Elem, Cauda).

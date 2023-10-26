@@ -25,7 +25,7 @@ console_adc_experiencia :-
     write("Nome: "), nl,
     read_line_to_string(user_input, Nome),
     write("Instituicao/Curso: "), nl,
-    read_line_to_string(user_input, Descricao), nl,
+    read_line_to_string(user_input, Descricao),
     write("Data de inicio (Formato: MM/AAAA): "),
     read_line_to_string(user_input, DataInicio),
     write("Data Final (Formato: MM/AAAA): "),
