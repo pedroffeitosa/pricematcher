@@ -17,8 +17,11 @@ menu_principal :-
 
 executar_opcao(1) :-
     writeln('Adicionar Desenvolvedor'),
-    console_adc_desenv,
+    write('Nome do Desenvolvedor: '),
+    read_line_to_string(user_input, Nome), % Leia o nome do desenvolvedor
+    adc_desenv(Nome), % Chame adc_desenv com o nome
     menu_principal.
+
 executar_opcao(2) :-
     writeln('Adicionar Especializao a um Desenvolvedor'),
     console_adc_espec,
@@ -33,8 +36,10 @@ executar_opcao(4) :-
     menu_principal.
 executar_opcao(5) :-
     writeln('Listar Projetos (Historico de Projetos)'),
-    listar_projetos, % Você deve implementar a lógica para listar os projetos aqui
+    listar_projetos, 
     menu_principal.
-executar_opcao(6).
+executar_opcao(6) :-
+    writeln('Saindo...'),
+    halt.
 
 :- menu_principal.

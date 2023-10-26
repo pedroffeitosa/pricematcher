@@ -127,11 +127,13 @@ console_adc_projeto :-
 % Consulta para listar os projetos
 listar_projetos :-
     consult('projeto.pl'),
-    findall(Projeto, projeto(Projeto), Projetos),
+    findall(Projeto, projeto(Projeto, _, _, _, _), Projetos), 
     writeln('Projetos Cadastrados:'),
     listar_projetos(Projetos).
-
+    
 listar_projetos([]).
 listar_projetos([Projeto | Projetos]) :-
     writeln(Projeto),
     listar_projetos(Projetos).
+
+
