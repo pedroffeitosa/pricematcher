@@ -4,7 +4,7 @@ menu_principal :-
     writeln("------------------------------------------------------------"),
     writeln('Bem-vindo ao PriceMatcher - Sistema de Gerenciamento de Desenvolvedores e Projetos'),
     repeat,
-    writeln('Escolha uma opcap:'),
+    writeln('Escolha uma opcao:'),
     writeln('1. Adicionar Desenvolvedor'),
     writeln('2. Verificar Desenvolvedor'),
     writeln('3. Adicionar Especializacao a um Desenvolvedor'),
@@ -29,12 +29,12 @@ executar_opcao("2") :-
     menu_principal.
 executar_opcao("3") :-
     writeln("------------------------------------------------------------"),
-    writeln('Adicionar Especializao a um Desenvolvedor'),
+    writeln('Adicionar Especializacao a um Desenvolvedor'),
     console_adc_espec,
     menu_principal.
 executar_opcao("4") :-
     writeln("------------------------------------------------------------"),
-    writeln('Adicionar Experiência a um Desenvolvedor'),
+    writeln('Adicionar Experiencia a um Desenvolvedor'),
     console_adc_experiencia,
     menu_principal.
 executar_opcao("5") :-

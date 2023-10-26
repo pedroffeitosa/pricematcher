@@ -1,6 +1,6 @@
 :- consult('sistema.pl').
 
-% Lê os dados do console para adicionar um desenvolvedor
+% Faz a leitura dados em console para adicionar um desenvolvedor
 console_adc_desenv :-
     write("Nome: "),
     read_line_to_string(user_input, Nome),
@@ -9,7 +9,7 @@ console_adc_desenv :-
     ;
         adc_desenv(Nome)).
 
-% Lê os dados do console para adicionar uma especialização em um desenvolvedor
+% Faz a leitura dados em console para adicionar uma especialização em um desenvolvedor
 console_adc_espec :-
     write("Nome: "), nl,
     read_line_to_string(user_input, Nome),
@@ -20,7 +20,7 @@ console_adc_espec :-
     ;
         write("Desenvolvedor nao cadastrado!")).
 
-% Lê os dados do console para adicionar uma experiencia em um desenvolvedor
+% Faz a leitura dados em console para adicionar uma experiencia em um desenvolvedor
 console_adc_experiencia :-
     write("Nome: "), nl,
     read_line_to_string(user_input, Nome),
@@ -38,7 +38,7 @@ console_adc_experiencia :-
     Experiencia = [Descricao, DataInicio, DataFinal],
     adc_experiencia(Nome, Experiencia, R).
 
-% Lê os dados do console para adicionar um projeto ao banco de dados
+% Faz a leitura dados em console para adicionar um projeto ao banco de dados
 console_adc_projeto :-
     write("Descricao: "), nl,
     read_line_to_string(user_input, Descricao),

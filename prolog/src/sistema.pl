@@ -18,7 +18,7 @@ complexidade("f", "Facil", 80).
 complexidade("i", "Intermediario", 160).
 complexidade("d", "Dificil", 240).
 
-% Adiciona uma especialização no Desenvolvedor em questão
+% Adiciona uma especialização em Desenvolvedor em questão
 adc_especializacao(Desenvolvedor, Especializacao) :-
     (desenvolvedor(nome(Desenvolvedor), especializacoes(ListaEsp), Xp, Vh, multiplicador(Mult)) ->
         append(ListaEsp, [Especializacao], Resultante),
@@ -29,7 +29,7 @@ adc_especializacao(Desenvolvedor, Especializacao) :-
     ;
         write("Desenvolvedor nao cadastrado!"),nl).
 
-% Adiciona uma experiencia no Desenvolvedor em questão, a experiencia é uma lista contendo uma descrição, data de inicio e data final respectivamente
+% Adiciona uma experiencia em Desenvolvedor em questão, a experiencia é uma lista contendo uma descrição, data de inicio e data final respectivamente
 adc_experiencia(Desenvolvedor, Experiencia, Meses) :-
     (desenvolvedor(nome(Desenvolvedor), Esp, experiencia(ListaXp), Vh, multiplicador(Mult)) ->
         append(ListaXp, [Experiencia], Resultante),
@@ -79,7 +79,7 @@ listar_projetos :-
     writeln("--------------------"),
     listar_projetos(Projetos).
 
-% Lista todos os projetos existentes no banco de dados
+% Lista todos os projetos existentes em banco de dados
 listar_projetos([]).
 listar_projetos([Projeto | Projetos]) :-
     projeto(descricao(Projeto), prazo(Prazo), complexidade(Complexidade), requisitos(Requisitos), horas(Horas)),
