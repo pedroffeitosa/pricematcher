@@ -1,6 +1,8 @@
-# pricematcher
+# Price Matcher
 
-# Objetivo
+Sistema de Gerenciamento de Desenvolvedores e Projetos
+
+## Objetivo
 
 O objetivo deste projeto é desenvolver um aplicativo que auxilie desenvolvedores a calcular o valor a ser cobrado por suas horas de trabalho com base na complexidade e dificuldade do projeto. O aplicativo proporcionará uma solução eficaz para a precificação justa e competitiva de projetos de desenvolvimento.
 
@@ -16,4 +18,12 @@ O objetivo deste projeto é desenvolver um aplicativo que auxilie desenvolvedore
 
 - **Histórico de Projetos e Pagamentos:** O aplicativo manterá um histórico detalhado de projetos anteriores e valores cobrados, auxiliando os desenvolvedores a analisar suas estratégias de precificação ao longo do tempo.
 
+## Como executar a aplicação
+
+### Hasckell
+
 Para rodar o projeto, clone o repositório e utilize "stack build" e em seguida "stack run".
+
+### Prolog
+
+Certifique-se de ter o ambiente prolog instalado em sua máquina. Você pode encontrar o instalador do SWI-Prolog no endereço: `https://www.swi-prolog.org/`. Em seguida, inicie a aplicação por meio do arquivo 'menu.pl'.
